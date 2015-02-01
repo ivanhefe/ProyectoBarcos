@@ -1,0 +1,6 @@
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSockets\PruebaSockets\bin\Debug\PruebaSockets.exe.config
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSockets\PruebaSockets\bin\Debug\PruebaSockets.exe
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSockets\PruebaSockets\bin\Debug\PruebaSockets.pdb
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSockets\PruebaSockets\obj\Debug\PruebaSockets.csprojResolveAssemblyReference.cache
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSockets\PruebaSockets\obj\Debug\PruebaSockets.exe
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSockets\PruebaSockets\obj\Debug\PruebaSockets.pdb

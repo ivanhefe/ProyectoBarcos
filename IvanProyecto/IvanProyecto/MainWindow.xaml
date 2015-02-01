@@ -1,40 +1,14 @@
 ﻿<Window x:Class="IvanProyecto.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Barcos" Height="432.777" Width="732.711" Loaded="Window_Loaded">
+        Title="Barcos" Height="432.777" Width="951.861" Loaded="Window_Loaded">
     <DockPanel Margin="0" LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Button Content="Nick" Width="100" Margin="5" Click="Button_Click"/>
             <Button Content="Jugar" Width="100" Margin="5" Click="Button_Click_1"/>
             <CheckBox Content="Rival preparado" Margin="5"/>
         </StackPanel>
-        <Grid x:Name="gridPropio" DockPanel.Dock="Left" Margin="5" AllowDrop="True">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="35" />
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="35" />
-                <ColumnDefinition Width="35"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
-        <Grid x:Name="grid" DockPanel.Dock="Right" Margin="5" Background="#FF29282B" Visibility="Collapsed">
+        <Grid x:Name="gridPropio" DockPanel.Dock="Left" Margin="5" AllowDrop="True" VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="35"/>
@@ -60,9 +34,36 @@
                 <ColumnDefinition Width="35"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <Canvas x:Name="barcos" DockPanel.Dock="Left" Background="#FFF13636">
-            <Label Content="Label" Height="31" Canvas.Left="19" Canvas.Top="20" Width="68" AllowDrop="True" RenderTransformOrigin="0.5,0.5" MouseMove="Label_MouseMove"/>
-            <Ellipse Fill="#FFB06767" Height="60" Canvas.Left="10" Canvas.Top="56" Width="112" MouseMove="Ellipse_MouseMove"/>
+        <Grid x:Name="grid" DockPanel.Dock="Left" Margin="5" Background="#FF29282B" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+            </Grid.ColumnDefinitions>
+
+        </Grid>
+        <Canvas x:Name="barcos" DockPanel.Dock="Left" Background="#FFF13636" Visibility="Collapsed">
+            <Label Content="Label" Height="31" Canvas.Left="19" Canvas.Top="20" Width="68" AllowDrop="True" RenderTransformOrigin="0.5,0.5" MouseMove="Label_MouseMove" Background="Transparent"/>
+            <Ellipse Fill="#FFB06767" Height="60" Canvas.Left="10" Canvas.Top="56" Width="112" MouseMove="Ellipse_MouseMove" Drop="gridPropio_Drop" DragEnter="gridPropio_DragEnter" DragOver="gridPropio_DragOver"/>
         </Canvas>
     </DockPanel>
 </Window>
