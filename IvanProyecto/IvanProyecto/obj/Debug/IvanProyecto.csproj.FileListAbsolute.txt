@@ -13,3 +13,5 @@ C:\Users\Ivan\Documents\GitHub\Barcos\IvanProyecto\IvanProyecto\obj\Debug\IvanPr
 C:\Users\Ivan\Documents\GitHub\Barcos\IvanProyecto\IvanProyecto\obj\Debug\IvanProyecto.pdb
 C:\Users\Ivan\Documents\GitHub\Barcos\IvanProyecto\IvanProyecto\obj\Debug\Window1.baml
 C:\Users\Ivan\Documents\GitHub\Barcos\IvanProyecto\IvanProyecto\obj\Debug\Window1.g.cs
+C:\Users\Ivan\Documents\GitHub\Barcos\IvanProyecto\IvanProyecto\obj\Debug\Window2.baml
+C:\Users\Ivan\Documents\GitHub\Barcos\IvanProyecto\IvanProyecto\obj\Debug\Window2.g.cs

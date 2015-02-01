@@ -26,20 +26,34 @@ namespace IvanProyecto {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            Rectangle re;
+            Rectangle re, re1;
             Color col = Color.FromRgb(41, 40, 43);
             grid.Background = new SolidColorBrush(col);
+            gridPropio.Background = new SolidColorBrush(Colors.LightBlue);
             for (int i = 0; i < grid.ColumnDefinitions.Count; i++) {
                 for (int j = 0; j < grid.RowDefinitions.Count; j++) {
                     re = new Rectangle();
-                    re.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
                     Grid.SetColumn(re, i);
                     Grid.SetRow(re, j);
+                   
                     re.Fill = new SolidColorBrush(col);
+                    re.Stroke = new SolidColorBrush(Colors.Black);
+                    re.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
                     grid.Children.Add(re);
-                    Console.Write("sdaf");
                 }
             }
+
+            //for (int i = 0; i < gridPropio.ColumnDefinitions.Count; i++) {
+            //    for (int j = 0; j < gridPropio.RowDefinitions.Count; j++) {
+            //        re = new Rectangle();
+            //        Grid.SetColumn(re, i);
+            //        Grid.SetRow(re, j);
+            //        re.Fill = new SolidColorBrush(Colors.LightBlue);
+            //        re.Stroke = new SolidColorBrush(Colors.Black);
+            //        re.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
+            //        gridPropio.Children.Add(re);
+            //    }
+            //}
         }
 
         public MainWindow(string p) {
@@ -71,6 +85,7 @@ namespace IvanProyecto {
             int x = Grid.GetColumn(re);
             int y = Grid.GetRow(re);
             re.Fill = new SolidColorBrush(Colors.Red);
+
             //MessageBox.Show(grid.ColumnDefinitions.Count.ToString());
             MessageBox.Show(x + "," + y);
         }
@@ -84,6 +99,30 @@ namespace IvanProyecto {
             //else {
             //    ventana.Topmost = false;
             //}
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            Window2 w2 = new Window2();
+            w2.ShowDialog();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            this.grid.Visibility = Visibility.Visible;
+            this.barcos.Visibility = Visibility.Collapsed;
+        }
+
+        private void Label_MouseMove(object sender, MouseEventArgs e) {
+            Label la = sender as Label;
+            if (la!= null && e.LeftButton== MouseButtonState.Pressed) {
+                DragDrop.DoDragDrop(la, la.Content.ToString(), DragDropEffects.Move);
+            }
+        }
+
+        private void Ellipse_MouseMove(object sender, MouseEventArgs e) {
+            Ellipse ellipse = sender as Ellipse;
+            if (ellipse != null && e.LeftButton == MouseButtonState.Pressed) {
+                DragDrop.DoDragDrop(ellipse, ellipse.Fill.ToString(), DragDropEffects.Copy);
+            }
         }
     }
 }
