@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace IvanProyecto {
     /// <summary>
@@ -22,6 +23,7 @@ namespace IvanProyecto {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+            
         }
 
         //sockets
@@ -66,8 +68,9 @@ namespace IvanProyecto {
             #endregion
             //sockets
             
-            sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+
             
             try {
                 //sockCli.Connect(localEndPoint);
@@ -114,9 +117,20 @@ namespace IvanProyecto {
                     ASCIIEncoding eEncoding = new ASCIIEncoding();
                     string receivedMessage = eEncoding.GetString(receivedData);
                     MessageBox.Show(receivedMessage);
-                    String[] coor = receivedData.ToString().Split(',');
-                    cambiar(coor);
                     
+                    string coord = receivedMessage.ToString().Substring(0, 3);
+                    String[] coord2 = coord.Split(',');
+                    
+                    //cambiar(coor);
+                    Action action = delegate {
+                        foreach (FrameworkElement canv in this.gridPropio.Children) {
+                            if (Convert.ToInt32(coord2[0]) == Grid.GetColumn(canv) && Convert.ToInt32(coord2[1]) == Grid.GetRow(canv)) {
+                                ((Canvas)canv).Background = new SolidColorBrush(Colors.Red);
+                                break;
+                            }
+                        }
+                    };
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, action);
                 }
 
                 byte[] buffer = new byte[1024];

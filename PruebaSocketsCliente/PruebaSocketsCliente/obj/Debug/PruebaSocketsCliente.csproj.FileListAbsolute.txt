@@ -1,6 +1,0 @@
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSocketsCliente\PruebaSocketsCliente\bin\Debug\PruebaSocketsCliente.exe.config
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSocketsCliente\PruebaSocketsCliente\obj\Debug\PruebaSocketsCliente.csprojResolveAssemblyReference.cache
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSocketsCliente\PruebaSocketsCliente\bin\Debug\PruebaSocketsCliente.exe
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSocketsCliente\PruebaSocketsCliente\bin\Debug\PruebaSocketsCliente.pdb
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSocketsCliente\PruebaSocketsCliente\obj\Debug\PruebaSocketsCliente.exe
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\PruebaSocketsCliente\PruebaSocketsCliente\obj\Debug\PruebaSocketsCliente.pdb
