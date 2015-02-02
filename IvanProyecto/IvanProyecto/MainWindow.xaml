@@ -7,6 +7,8 @@
             <Button Content="Nick" Width="100" Margin="5" Click="Button_Click"/>
             <Button Content="Jugar" Width="100" Margin="5" Click="Button_Click_1"/>
             <CheckBox Content="Rival preparado" Margin="5"/>
+            <TextBox x:Name="puerto" Height="24" TextWrapping="Wrap" Text="TextBox" Width="114"/>
+            <TextBox x:Name="puerto2" Height="23" TextWrapping="Wrap" Text="TextBox" Width="120"/>
         </StackPanel>
         <Grid x:Name="gridPropio" DockPanel.Dock="Left" Margin="5" AllowDrop="True" VerticalAlignment="Top">
             <Grid.RowDefinitions>

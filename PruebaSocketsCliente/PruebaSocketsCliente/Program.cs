@@ -32,8 +32,11 @@ namespace PruebaSocketsCliente {
 
                 // Connect the socket to the remote endpoint. Catch any errors.
                 try {
-                    sender.Connect(remoteEP);
+                    
 
+                    
+                        sender.Connect(remoteEP); 
+                    
                     Console.WriteLine("Socket connected to {0}",
                         sender.RemoteEndPoint.ToString());
 
@@ -47,27 +50,36 @@ namespace PruebaSocketsCliente {
                     int bytesRec = sender.Receive(bytes);
                     Console.WriteLine("Echoed test = {0}",
                         Encoding.ASCII.GetString(bytes, 0, bytesRec));
-
-                    // Release the socket.
-                    //sender.Shutdown(SocketShutdown.Both);
+                    sender.Shutdown(SocketShutdown.Both);
+                    
                     sender.Close();
-                    Console.Read();
+                    
+                    // Release the socket.
+                    //
+                    //sender.Close();
+                    
 
                 }
                 catch (ArgumentNullException ane) {
                     Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
+                    Console.Read();
                 }
                 catch (SocketException se) {
                     Console.WriteLine("SocketException : {0}", se.ToString());
+                    Console.Read();
                 }
                 catch (Exception e) {
                     Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                    Console.Read();
                 }
 
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                Console.Read();
             }
+            Console.Read();
         }
+
     }
 }
