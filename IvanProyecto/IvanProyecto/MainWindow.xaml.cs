@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -23,22 +24,26 @@ namespace IvanProyecto {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-            
+
         }
 
         //sockets
         Socket sock;
         EndPoint epLocal, epRemote;
+        private readonly BackgroundWorker worker = new BackgroundWorker();
+        IPHostEntry ipHostInfo;
+        IPAddress ipAddress;
+        IPEndPoint localEndPoint;
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            #region poner canvas
+
             Canvas ca;
             Color col = Color.FromRgb(41, 40, 43);
             Thickness margen = new Thickness(1);
-            grid.Background = new SolidColorBrush(col);
+            gridRival.Background = new SolidColorBrush(col);
             gridPropio.Background = new SolidColorBrush(Colors.LightBlue);
-            for (int i = 0; i < grid.ColumnDefinitions.Count; i++) {
-                for (int j = 0; j < grid.RowDefinitions.Count; j++) {
+            for (int i = 0; i < gridRival.ColumnDefinitions.Count; i++) {
+                for (int j = 0; j < gridRival.RowDefinitions.Count; j++) {
                     ca = new Canvas();
                     Grid.SetColumn(ca, i);
                     Grid.SetRow(ca, j);
@@ -47,14 +52,14 @@ namespace IvanProyecto {
                     //ca.Fill = new SolidColorBrush(col);
 
                     ca.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
-                    grid.Children.Add(ca);
+                    gridRival.Children.Add(ca);
                 }
             }
             //drag and drop
             //https://msdn.microsoft.com/en-us/library/ms742859%28v=vs.110%29.aspx
 
-            for (int i = 0; i < grid.ColumnDefinitions.Count; i++) {
-                for (int j = 0; j < grid.RowDefinitions.Count; j++) {
+            for (int i = 0; i < gridPropio.ColumnDefinitions.Count; i++) {
+                for (int j = 0; j < gridPropio.RowDefinitions.Count; j++) {
                     ca = new Canvas();
                     Grid.SetColumn(ca, i);
                     Grid.SetRow(ca, j);
@@ -65,38 +70,95 @@ namespace IvanProyecto {
                     gridPropio.Children.Add(ca);
                 }
             }
-            #endregion
+
             //sockets
-            
-            sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
 
-            
+            //sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            //sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+
+
+            //try {
+            //    //sockCli.Connect(localEndPoint);
+            //    //Convert.ToBase64CharArray("prueba2<EOF>");
+            //    //sockCli.Connect(localEndPoint);
+
+            //    //sockCli.Shutdown(SocketShutdown.Both);
+            //    //sockCli.Close();
+
+
+            //}
+            //catch (Exception ex) {
+            //    MessageBox.Show(ex.Message);
+            //}
+            ipHostInfo = Dns.Resolve(Dns.GetHostName());
+            ipAddress = ipHostInfo.AddressList[0];
+            localEndPoint = new IPEndPoint(ipAddress, 11000);
+            worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            worker.RunWorkerAsync();
+        }
+
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+
+        }
+
+
+
+        Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e) {
+            String data = null;
+            byte[] bytes = new Byte[1024];
             try {
-                //sockCli.Connect(localEndPoint);
-                //Convert.ToBase64CharArray("prueba2<EOF>");
-                //sockCli.Connect(localEndPoint);
+                listener.Bind(localEndPoint);
+                listener.Listen(1);
+                while (true) {
+                    Console.WriteLine("Waiting for a connection...");
+                    // Program is suspended while waiting for an incoming connection.
+                    Socket handler = listener.Accept();
 
-                //sockCli.Shutdown(SocketShutdown.Both);
-                //sockCli.Close();
-                
-                
+                    // An incoming connection needs to be processed.
+                    while (true) {
+                        bytes = new byte[1024];
+                        int bytesRec = handler.Receive(bytes);
+                        data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                        if (data.IndexOf("<EOF>") > -1) {
+
+                            break;
+                        }
+                    }
+
+                    // Show the data on the console.
+                    //MessageBox.Show(data);
+                    Console.WriteLine("Text received : {0}", data);
+                    Dispatcher dire = this.Dispatcher;
+                    dire.BeginInvoke(DispatcherPriority.Normal, (Action)(() => ProcesarMensajes(data)));
+
+                    // Echo the data back to the client.
+                    byte[] msg = Encoding.ASCII.GetBytes("asdf");
+
+                    //handler.Send(msg);
+                    handler.Shutdown(SocketShutdown.Both);
+                    handler.Close();
+                }
+
             }
             catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
+
         }
 
-        private String localIp() {
-            IPHostEntry host;
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList) {
-                if (ip.AddressFamily == AddressFamily.InterNetwork) {
-                    return ip.ToString();
-                }
-            }
-            return "127.0.0.1";
-        }
+        //private String localIp() {
+        //    IPHostEntry host;
+        //    host = Dns.GetHostEntry(Dns.GetHostName());
+        //    foreach (IPAddress ip in host.AddressList) {
+        //        if (ip.AddressFamily == AddressFamily.InterNetwork) {
+        //            return ip.ToString();
+        //        }
+        //    }
+        //    return "127.0.0.1";
+        //}
 
         private void cambiar(String[] coor) {
             foreach (FrameworkElement canv in this.gridPropio.Children) {
@@ -105,9 +167,38 @@ namespace IvanProyecto {
                     break;
                 }
             }
-        
         }
 
+
+
+        private void ProcesarMensajes(string mensajeRecibido) {            
+            const int PJ = 0;
+            this.check.IsChecked = true;
+            string[] mensaje = mensajeRecibido.Split('~');
+            Int32 x, y;
+            aasdf(mensajeRecibido);
+            switch (Convert.ToInt16(mensaje[0])) {
+                case PJ:
+                    MessageBox.Show("asdf");
+                    break;
+                default:                   
+                    x = Convert.ToInt32(mensaje[1]);
+                    y = Convert.ToInt32(mensaje[2]);
+                    foreach (FrameworkElement canv in this.gridPropio.Children) {
+                        if (x == Grid.GetColumn(canv) && y == Grid.GetRow(canv)) {
+                            ((Canvas)canv).Background = new SolidColorBrush(Colors.Red);
+                            break;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void aasdf(string mensaje) {
+            string[] mens = mensaje.Split('~');
+            int x = Convert.ToInt32(mens[1]);
+            MessageBox.Show(x.ToString());
+        }
         private void MessageCallBack(IAsyncResult aResult) {
             try {
                 int size = sock.EndReceiveFrom(aResult, ref epRemote);
@@ -117,10 +208,10 @@ namespace IvanProyecto {
                     ASCIIEncoding eEncoding = new ASCIIEncoding();
                     string receivedMessage = eEncoding.GetString(receivedData);
                     MessageBox.Show(receivedMessage);
-                    
+
                     string coord = receivedMessage.ToString().Substring(0, 3);
                     String[] coord2 = coord.Split(',');
-                    
+
                     //cambiar(coor);
                     Action action = delegate {
                         foreach (FrameworkElement canv in this.gridPropio.Children) {
@@ -175,23 +266,12 @@ namespace IvanProyecto {
                 try {
                     ASCIIEncoding enc = new ASCIIEncoding();
                     byte[] msg = new byte[1024];
-                    msg = enc.GetBytes(x+","+y);
-
+                    msg = enc.GetBytes(x + "," + y);
                     sock.Send(msg);
-
                 }
                 catch (Exception ex) {
-                    MessageBox.Show(ex.Message);   
+                    MessageBox.Show(ex.Message);
                 }
-                //MessageBox.Show(x + "," + y);
-
-                //recibir coordenadas
-                //foreach (FrameworkElement canv in this.gridPropio.Children) {
-                //    if (x == Grid.GetColumn(canv) && y == Grid.GetRow(canv)) {
-                //        ((Canvas)canv).Background = new SolidColorBrush(Colors.Red);
-                //        break;
-                //    }
-                //}
             }
             else {
                 MessageBox.Show("Ya has clickeado en esta casilla");
@@ -207,16 +287,9 @@ namespace IvanProyecto {
                 //sock.Disconnect(true);
             }
             catch (Exception ex) {
-
                 MessageBox.Show(ex.Message);
             }
-
             //sockCli.Shutdown(SocketShutdown.Both);
-
-
-        }
-        private void CheckBox_Checked(object sender, RoutedEventArgs e) {
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
@@ -228,14 +301,14 @@ namespace IvanProyecto {
             //this.grid.Visibility = Visibility.Visible;
             //this.barcos.Visibility = Visibility.Collapsed;
 
-            epLocal = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto.Text));
-            sock.Bind(epLocal);
+            //epLocal = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto.Text));
+            //sock.Bind(epLocal);
 
-            epRemote = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto2.Text));
-            sock.Connect(epRemote);
+            //epRemote = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto2.Text));
+            //sock.Connect(epRemote);
 
-            byte[] buffer = new byte[1024];
-            sock.BeginReceiveFrom(buffer, 0, buffer.Length ,SocketFlags.None, ref epRemote, new AsyncCallback(MessageCallBack),buffer);
+            //byte[] buffer = new byte[1024];
+            //sock.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref epRemote, new AsyncCallback(MessageCallBack), buffer);
 
         }
 
@@ -285,4 +358,11 @@ namespace IvanProyecto {
         }
         #endregion
     }
+
+    public static class Mensajes {
+
+
+    }
 }
+
+

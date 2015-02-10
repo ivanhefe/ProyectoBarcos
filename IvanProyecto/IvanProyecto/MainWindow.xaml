@@ -6,11 +6,11 @@
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Button Content="Nick" Width="100" Margin="5" Click="Button_Click"/>
             <Button Content="Jugar" Width="100" Margin="5" Click="Button_Click_1"/>
-            <CheckBox Content="Rival preparado" Margin="5"/>
+            <CheckBox x:Name="check" Content="Rival preparado" Margin="5"/>
             <TextBox x:Name="puerto" Height="24" TextWrapping="Wrap" Text="TextBox" Width="114"/>
             <TextBox x:Name="puerto2" Height="23" TextWrapping="Wrap" Text="TextBox" Width="120"/>
         </StackPanel>
-        <Grid x:Name="gridPropio" DockPanel.Dock="Left" Margin="5" AllowDrop="True" VerticalAlignment="Top">
+        <Grid x:Name="gridPropio" DockPanel.Dock="Left" Margin="5" AllowDrop="True" VerticalAlignment="Top" Background="#FFEAD3D3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="35"/>
@@ -36,7 +36,9 @@
                 <ColumnDefinition Width="35"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <Grid x:Name="grid" DockPanel.Dock="Left" Margin="5" Background="#FF29282B" VerticalAlignment="Top">
+        <Canvas Width="129" DockPanel.Dock="Left" Background="#FFBB6060" />
+
+        <Grid x:Name="gridRival" DockPanel.Dock="Left" Margin="5" VerticalAlignment="Top" Background="#FFB28E8E">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="35"/>
@@ -67,5 +69,6 @@
             <Label Content="Label" Height="31" Canvas.Left="19" Canvas.Top="20" Width="68" AllowDrop="True" RenderTransformOrigin="0.5,0.5" MouseMove="Label_MouseMove" Background="Transparent"/>
             <Ellipse Fill="#FFB06767" Height="60" Canvas.Left="10" Canvas.Top="56" Width="112" MouseMove="Ellipse_MouseMove" Drop="gridPropio_Drop" DragEnter="gridPropio_DragEnter" DragOver="gridPropio_DragOver"/>
         </Canvas>
+        <Label Content="Label" Height="46" Margin="0,51,0,0" VerticalAlignment="Top" Width="52"/>
     </DockPanel>
 </Window>
