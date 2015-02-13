@@ -69,6 +69,10 @@
             <Label Content="Label" Height="31" Canvas.Left="19" Canvas.Top="20" Width="68" AllowDrop="True" RenderTransformOrigin="0.5,0.5" MouseMove="Label_MouseMove" Background="Transparent"/>
             <Ellipse Fill="#FFB06767" Height="60" Canvas.Left="10" Canvas.Top="56" Width="112" MouseMove="Ellipse_MouseMove" Drop="gridPropio_Drop" DragEnter="gridPropio_DragEnter" DragOver="gridPropio_DragOver"/>
         </Canvas>
-        <Label Content="Label" Height="46" Margin="0,51,0,0" VerticalAlignment="Top" Width="52"/>
+        <Label Content="Label" Height="29" Margin="0,51,0,0" VerticalAlignment="Top" Width="52">
+            <Label.Background>
+                <ImageBrush/>
+            </Label.Background>
+        </Label>
     </DockPanel>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -362,6 +363,60 @@ namespace IvanProyecto {
     public static class Mensajes {
 
 
+    }
+
+    public class Barco {
+        private int vida;
+        private int tamaño;
+        List<Coordenadas> coordenadas = new List<Coordenadas> ();
+        Label etiqueta;
+
+        public Barco(int tamaño, FrameworkElement padre) {
+            this.tamaño = tamaño;
+            this.vida = tamaño;
+            etiqueta = new Label();
+            if (true) {
+                
+            }
+        }
+
+        public void anyadirCoordenadas(int x, int y){
+            coordenadas.Add(new Coordenadas(x, y));
+        }
+
+        //comprueba si el disparo enemigo acierta en alguna coordenada
+        public Boolean comprobarPosicion(int x, int y){
+            for (int i = 0; i < coordenadas.Count; i++) {
+                if (coordenadas[i].comprobar(x,y)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public class Coordenadas {
+        private int x;
+        private int y;
+
+        public Coordenadas(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public void setX(int x){
+            this.x = x;
+        }
+
+        public Boolean comprobar(int x, int y) {
+            if (this.x == x && this.y == y)
+                return true;
+            return false;
+        }
+
+        public override string ToString() {
+            return x.ToString() + "" + y.ToString();
+        }
     }
 }
 
