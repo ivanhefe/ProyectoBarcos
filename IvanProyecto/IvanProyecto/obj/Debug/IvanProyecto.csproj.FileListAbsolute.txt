@@ -30,3 +30,6 @@ C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debu
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IvanProyecto.g.resources
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IvanProyecto.Properties.Resources.resources
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IvanProyecto.csproj.GenerateResource.Cache
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\Orientacion.baml
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\Orientacion.g.cs
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\bin\Debug\Imagenes\barco1.png

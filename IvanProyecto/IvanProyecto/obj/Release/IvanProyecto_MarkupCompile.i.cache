@@ -4,15 +4,15 @@
 winexe
 C#
 .cs
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\
 IvanProyecto
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\App.xaml
 3-271461931
 
-12-1721629544
+12-831147029
 19820593930
 MainWindow.xaml;Orientacion.xaml;Window2.xaml;
 

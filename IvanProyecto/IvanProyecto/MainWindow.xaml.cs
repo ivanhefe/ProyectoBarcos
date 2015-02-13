@@ -36,13 +36,14 @@ namespace IvanProyecto {
         IPAddress ipAddress;
         IPEndPoint localEndPoint;
 
+
         private void Window_Loaded(object sender, RoutedEventArgs e) {
 
-            Canvas ca;
+            Canvas ca = null;
             Color col = Color.FromRgb(41, 40, 43);
             Thickness margen = new Thickness(1);
             gridRival.Background = new SolidColorBrush(col);
-            gridPropio.Background = new SolidColorBrush(Colors.LightBlue);
+            //gridPropio.Background = new SolidColorBrush(Colors.LightBlue);
             for (int i = 0; i < gridRival.ColumnDefinitions.Count; i++) {
                 for (int j = 0; j < gridRival.RowDefinitions.Count; j++) {
                     ca = new Canvas();
@@ -58,16 +59,24 @@ namespace IvanProyecto {
             }
             //drag and drop
             //https://msdn.microsoft.com/en-us/library/ms742859%28v=vs.110%29.aspx
+            var brush = new ImageBrush();
+            brush.ImageSource = new BitmapImage(new Uri("Imagenes/fondo.png", UriKind.Relative));
 
             for (int i = 0; i < gridPropio.ColumnDefinitions.Count; i++) {
                 for (int j = 0; j < gridPropio.RowDefinitions.Count; j++) {
                     ca = new Canvas();
                     Grid.SetColumn(ca, i);
                     Grid.SetRow(ca, j);
+
                     ca.Margin = margen;
-                    ca.Background = new SolidColorBrush(Colors.Azure);
-                    //ca.Fill = new SolidColorBrush(col);                  
+                    ca.Background = brush;
+
+                    ca.AllowDrop = true;
+                    ca.Drop += ca_Drop;
+
+                    //ca.Fill = new SolidColorBrush(col);
                     //ca.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
+
                     gridPropio.Children.Add(ca);
                 }
             }
@@ -91,19 +100,70 @@ namespace IvanProyecto {
             //catch (Exception ex) {
             //    MessageBox.Show(ex.Message);
             //}
+
+            List<Barco> barcos = new List<Barco>();
+            //metodo reiniciar partida
+            barcos.Add(new Barco(3, canvasBarcos, 0));
+            barcos.Add(new Barco(2, canvasBarcos, 30));
+            barcos.Add(new Barco(2, canvasBarcos, 60));
+            barcos.Add(new Barco(1, canvasBarcos, 90));
+            barcos.Add(new Barco(1, canvasBarcos, 120));
+            barcos.Add(new Barco(1, canvasBarcos, 120));
+            
             ipHostInfo = Dns.Resolve(Dns.GetHostName());
             ipAddress = ipHostInfo.AddressList[0];
             localEndPoint = new IPEndPoint(ipAddress, 11000);
             worker.DoWork += worker_DoWork;
-            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            //worker.RunWorkerCompleted += worker_RunWorkerCompleted;
             worker.RunWorkerAsync();
-        }
-
-        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
 
         }
 
+        void ca_Drop(object sender, DragEventArgs e) {
+            //abrir ventana que indique dirección
+            int columna, fila;
+            if (e.Handled == false) {
+                Canvas canvasNuevo = (Canvas)sender;
+                //MessageBox.Show(e.GetPosition(canvasNuevo).ToString());
+                Label label = (Label)e.Data.GetData("Etiqueta");
+                Barco barco = (Barco)e.Data.GetData("Object");
+                MessageBox.Show(barco.getTamaño().ToString());
+                if (canvasNuevo != null && label != null) {
+                    Canvas padre = (Canvas)VisualTreeHelper.GetParent(label);
+                    if (padre != null) {
+                        //MessageBox.Show("zxzx");
+                        if (e.AllowedEffects.HasFlag(DragDropEffects.Move)) {
+                            //rotar
+                            columna = Grid.GetColumn(canvasNuevo);
+                            fila = Grid.GetRow(canvasNuevo);
+                            if (barco.getTamaño() >1) {
+                                Orientacion or = new Orientacion(columna, fila, barco.getTamaño());
+                                or.ShowDialog();
+                                //label.RenderTransform = 23432;
+                            }
+                            
+                            //quitar
+                            if (Grid.GetColumn(canvasNuevo) + barco.getTamaño() > 10) {
+                                MessageBox.Show("No se puede colocar aquí");
+                            }
+                            else {
+                                padre.Children.Remove(label);
+                                //MessageBox.Show(Grid.GetColumn(canvasNuevo).ToString());
+                                canvasNuevo.Children.Add(label);
+                                Canvas.SetTop(label, 0);
+                                barco.eliminarMouseDown();
+                                if (canvasBarcos.Children.Count == 0) {
+                                    MessageBox.Show("No tiene hijos");
+                                    this.bJugar.IsEnabled = true;
+                                }
+                            }
 
+                        }
+                    }
+                }
+                //MessageBox.Show("asdf");
+            }
+        }
 
         Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -172,7 +232,7 @@ namespace IvanProyecto {
 
 
 
-        private void ProcesarMensajes(string mensajeRecibido) {            
+        private void ProcesarMensajes(string mensajeRecibido) {
             const int PJ = 0;
             this.check.IsChecked = true;
             string[] mensaje = mensajeRecibido.Split('~');
@@ -182,7 +242,7 @@ namespace IvanProyecto {
                 case PJ:
                     MessageBox.Show("asdf");
                     break;
-                default:                   
+                default:
                     x = Convert.ToInt32(mensaje[1]);
                     y = Convert.ToInt32(mensaje[2]);
                     foreach (FrameworkElement canv in this.gridPropio.Children) {
@@ -300,8 +360,9 @@ namespace IvanProyecto {
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
             //this.grid.Visibility = Visibility.Visible;
-            //this.barcos.Visibility = Visibility.Collapsed;
-
+            this.canvasBarcos.Visibility = Visibility.Collapsed;
+            this.gridRival.Visibility = Visibility.Visible;
+            this.ventana.Width = 750;
             //epLocal = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto.Text));
             //sock.Bind(epLocal);
 
@@ -358,6 +419,10 @@ namespace IvanProyecto {
             }
         }
         #endregion
+
+        private void gridPropio_Drop_1(object sender, DragEventArgs e) {
+
+        }
     }
 
     public static class Mensajes {
@@ -365,59 +430,6 @@ namespace IvanProyecto {
 
     }
 
-    public class Barco {
-        private int vida;
-        private int tamaño;
-        List<Coordenadas> coordenadas = new List<Coordenadas> ();
-        Label etiqueta;
-
-        public Barco(int tamaño, FrameworkElement padre) {
-            this.tamaño = tamaño;
-            this.vida = tamaño;
-            etiqueta = new Label();
-            if (true) {
-                
-            }
-        }
-
-        public void anyadirCoordenadas(int x, int y){
-            coordenadas.Add(new Coordenadas(x, y));
-        }
-
-        //comprueba si el disparo enemigo acierta en alguna coordenada
-        public Boolean comprobarPosicion(int x, int y){
-            for (int i = 0; i < coordenadas.Count; i++) {
-                if (coordenadas[i].comprobar(x,y)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public class Coordenadas {
-        private int x;
-        private int y;
-
-        public Coordenadas(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public void setX(int x){
-            this.x = x;
-        }
-
-        public Boolean comprobar(int x, int y) {
-            if (this.x == x && this.y == y)
-                return true;
-            return false;
-        }
-
-        public override string ToString() {
-            return x.ToString() + "" + y.ToString();
-        }
-    }
 }
 
 
