@@ -35,7 +35,7 @@ namespace IvanProyecto {
         IPHostEntry ipHostInfo;
         IPAddress ipAddress;
         IPEndPoint localEndPoint;
-
+        List<Barco> barcos;
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
 
@@ -76,19 +76,19 @@ namespace IvanProyecto {
                 }
             }
 
-            List<Barco> barcos = new List<Barco>();
+            barcos = new List<Barco>();
             //metodo reiniciar partida
 
             //ELIMINAR
-            for (int i = 0; i < 10; i++) {
-                barcos.Add(new Barco(3, canvasBarcos, 0));
-            }
+            //for (int i = 0; i < 10; i++) {
+            //    barcos.Add(new Barco(3, canvasBarcos, 0));
+            //}
             barcos.Add(new Barco(3, canvasBarcos, 0));
             barcos.Add(new Barco(2, canvasBarcos, 30));
-            barcos.Add(new Barco(2, canvasBarcos, 60));
+            //barcos.Add(new Barco(2, canvasBarcos, 60));
             barcos.Add(new Barco(1, canvasBarcos, 90));
-            barcos.Add(new Barco(1, canvasBarcos, 120));
-            barcos.Add(new Barco(1, canvasBarcos, 120));
+            //barcos.Add(new Barco(1, canvasBarcos, 120));
+            //barcos.Add(new Barco(1, canvasBarcos, 120));
 
             ipHostInfo = Dns.Resolve(Dns.GetHostName());
             ipAddress = ipHostInfo.AddressList[0];
@@ -126,7 +126,7 @@ namespace IvanProyecto {
                                 padre.Children.Remove(label);
                                 //MessageBox.Show(Grid.GetColumn(canvasNuevo).ToString());
                                 canvasNuevo.Children.Add(label);
-                                //Canvas.SetTop(label, 0);
+                                Canvas.SetTop(label, 0);
                                 barco.eliminarMouseDown();
                                 //va fuera
                                 if (canvasBarcos.Children.Count == 0) {
@@ -141,38 +141,51 @@ namespace IvanProyecto {
         }
 
         private bool colocarBarco(Canvas padre, Label label, Barco barco, int x, int y) {
+            //si barco es mayor que 1 abre orientación
+            bool ocupado = false;
+            int direccion = 0;
             if (barco.getTamaño() > 1) {
                 Orientacion or = new Orientacion(x, y, barco.getTamaño());
                 if (or.ShowDialog() == or.DialogResult) {
                     //0 derecha, 1 abajo, 2 izquierda, 3 arriba
-                    int direccion = or.Direccion;
-                    //rota según la dirección
-                    RotateTransform rotateTransform1 = new RotateTransform(90 * direccion, 17.5, 17.5);
-                    label.RenderTransform = rotateTransform1;
-                    for (int i = 0; i < barco.getTamaño(); i++) {
-                        barco.anyadirCoordenadas(x, y);
-                        switch (direccion) {
-                            case 0:
-                                x++;
-                                break;
-                            case 1:
-                                y++;
-                                break;
-                            case 2:
-                                x--;
-                                break;
-                            case 3:
-                                y--;
-                                break;
-                        }
-                        Console.WriteLine(x.ToString() +" "+ y.ToString());
-                    }
-                    return true;
+                    direccion = or.Direccion;
                 }
-                return false;
+                else {
+                    return false;
+                }
             }
-            barco.anyadirCoordenadas(x, y);
-            Console.WriteLine(x.ToString() + " " + y.ToString());
+            for (int i = 0; i < barco.getTamaño(); i++) {
+                for (int j = 0; j < barcos.Count; j++) {
+                    ocupado = barcos[j].comprobarPosicion(x, y);
+                    if (ocupado == true) {
+                        break;
+                    }
+                }
+                if (!ocupado) {
+                    barco.anyadirCoordenadas(x, y);
+                    Console.WriteLine(x.ToString() + " " + y.ToString());
+                    switch (direccion) {
+                        case 0:
+                            x++;
+                            break;
+                        case 1:
+                            y++;
+                            break;
+                        case 2:
+                            x--;
+                            break;
+                        case 3:
+                            y--;
+                            break;
+                    }
+                }
+                else {
+                    Console.WriteLine("ocupado");
+                    return false;
+                }
+            }
+            RotateTransform rotateTransform1 = new RotateTransform(90 * direccion, 17.5, 17.5);
+            label.RenderTransform = rotateTransform1;
             return true;
         }
         //SOCKET SERVIDOR, FALTA PODER CAMBIAR IP

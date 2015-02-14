@@ -23,16 +23,18 @@ namespace IvanProyecto {
         }
 
         public Orientacion(int columna, int fila, int tamaño) {
+            Console.WriteLine(tamaño.ToString());
             InitializeComponent();          
-            if (columna == 0 || columna - tamaño < 0 ) {
+            if (columna == 0 || columna - tamaño < -1 ) {
                 this.bIzqu.IsEnabled = false;
-            } if (columna == 9 || columna + tamaño > 10) {
+            } 
+            if (columna == 9 || columna + tamaño > 10) {
                 this.bDer.IsEnabled = false;
             }
-            if (fila == 0 || fila - tamaño < 0) {
+            if (fila == 0 || fila - tamaño < -1) {
                 this.bArriba.IsEnabled = false;
             }
-            if (fila == 9 || fila - tamaño >10) {
+            if (fila == 9 || fila + tamaño >10) {
                 this.bAba.IsEnabled = false;
             }
         }

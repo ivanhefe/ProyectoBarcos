@@ -72,7 +72,7 @@
             </Grid.ColumnDefinitions>
 
         </Grid>
-        <Canvas x:Name="barcos" DockPanel.Dock="Left" Background="#FFF13636" Visibility="Collapsed">
+        <Canvas x:Name="cBarcos" DockPanel.Dock="Left" Background="#FFF13636" Visibility="Collapsed">
             <Label Content="Label" Height="31" Canvas.Left="19" Canvas.Top="20" Width="68" AllowDrop="True" RenderTransformOrigin="0.5,0.5" Background="Transparent"/>
             <Ellipse Fill="#FFB06767" Height="60" Canvas.Left="10" Canvas.Top="56" Width="112" />
         </Canvas>

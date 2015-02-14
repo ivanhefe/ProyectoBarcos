@@ -61,11 +61,16 @@ namespace IvanProyecto {
             coordenadas.Add(new Coordenadas(x, y));
         }
 
+        public void eliminarCoordenadas() {
+            coordenadas.Clear();
+        }
         public void eliminarMouseDown() {
             this.etiqueta.MouseDown -= etiqueta_MouseDown;
         }
         //comprueba si el disparo enemigo acierta en alguna coordenada
+        
         public Boolean comprobarPosicion(int x, int y) {
+            
             for (int i = 0; i < coordenadas.Count; i++) {
                 if (coordenadas[i].comprobar(x, y)) {
                     return true;
@@ -81,10 +86,6 @@ namespace IvanProyecto {
         public Coordenadas(int x, int y) {
             this.x = x;
             this.y = y;
-        }
-
-        public void setX(int x) {
-            this.x = x;
         }
 
         public Boolean comprobar(int x, int y) {
