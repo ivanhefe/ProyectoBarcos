@@ -25,7 +25,7 @@ namespace IvanProyecto {
             this.tamaño = tamaño;
             this.vida = tamaño;
             etiqueta = new Label();
-            if (tamaño == 1) {
+            if (tamaño == 1 || tamaño == 2 || tamaño == 3 ) {
                 this.etiqueta.Background = brush;
                 this.etiqueta.Width = 33 * tamaño;
                 this.etiqueta.Height = 33;
@@ -33,7 +33,7 @@ namespace IvanProyecto {
             else {
                 string texto = new string('X', tamaño);
                 etiqueta.Content = texto;
-                etiqueta.FontSize = 34;
+                etiqueta.FontSize = 33;
                 etiqueta.FontWeight = FontWeights.ExtraBlack;
             }
             

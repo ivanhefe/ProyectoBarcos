@@ -39,7 +39,11 @@
                 <ColumnDefinition Width="35"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <Canvas x:Name="canvasBarcos" Width="129" DockPanel.Dock="Left" Background="#FFBB6060" Height="350" Margin="5" VerticalAlignment="Top" />
+        <Canvas x:Name="canvasBarcos" Width="129" DockPanel.Dock="Left" Height="350" Margin="5" VerticalAlignment="Top" >
+            <Canvas.Background>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
+            </Canvas.Background>
+        </Canvas>
 
         <Grid x:Name="gridRival" DockPanel.Dock="Left" Margin="5" VerticalAlignment="Top" Background="#FFB28E8E" Visibility="Collapsed">
             <Grid.RowDefinitions>
@@ -69,15 +73,15 @@
 
         </Grid>
         <Canvas x:Name="barcos" DockPanel.Dock="Left" Background="#FFF13636" Visibility="Collapsed">
-            <Label Content="Label" Height="31" Canvas.Left="19" Canvas.Top="20" Width="68" AllowDrop="True" RenderTransformOrigin="0.5,0.5" MouseMove="Label_MouseMove" Background="Transparent"/>
-            <Ellipse Fill="#FFB06767" Height="60" Canvas.Left="10" Canvas.Top="56" Width="112" MouseMove="Ellipse_MouseMove" Drop="gridPropio_Drop" DragEnter="gridPropio_DragEnter" DragOver="gridPropio_DragOver"/>
+            <Label Content="Label" Height="31" Canvas.Left="19" Canvas.Top="20" Width="68" AllowDrop="True" RenderTransformOrigin="0.5,0.5" Background="Transparent"/>
+            <Ellipse Fill="#FFB06767" Height="60" Canvas.Left="10" Canvas.Top="56" Width="112" />
         </Canvas>
         <Label Content="X" Height="66" Margin="0,51,0,0" VerticalAlignment="Top" Width="52" FontSize="35" FontWeight="ExtraBlack" RenderTransformOrigin="0.5,0.5">
             <Label.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
                     <SkewTransform/>
-                    <RotateTransform Angle="90"/>
+                    <RotateTransform Angle="363.814"/>
                     <TranslateTransform/>
                 </TransformGroup>
             </Label.RenderTransform>

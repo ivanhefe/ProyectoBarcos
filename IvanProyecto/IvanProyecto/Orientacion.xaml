@@ -1,7 +1,7 @@
 ﻿<Window x:Class="IvanProyecto.Orientacion"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Orientacion" Height="200" Width="179">
+        Title="Orientacion" Height="200" Width="179" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

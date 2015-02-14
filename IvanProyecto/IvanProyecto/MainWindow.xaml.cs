@@ -39,77 +39,57 @@ namespace IvanProyecto {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
 
-            Canvas ca = null;
+            Canvas canvas = null;
             Color col = Color.FromRgb(41, 40, 43);
             Thickness margen = new Thickness(1);
             gridRival.Background = new SolidColorBrush(col);
             //gridPropio.Background = new SolidColorBrush(Colors.LightBlue);
             for (int i = 0; i < gridRival.ColumnDefinitions.Count; i++) {
                 for (int j = 0; j < gridRival.RowDefinitions.Count; j++) {
-                    ca = new Canvas();
-                    Grid.SetColumn(ca, i);
-                    Grid.SetRow(ca, j);
-                    ca.Margin = margen;
-                    ca.Background = new SolidColorBrush(Colors.Azure);
-                    //ca.Fill = new SolidColorBrush(col);
-
-                    ca.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
-                    gridRival.Children.Add(ca);
+                    canvas = new Canvas();
+                    Grid.SetColumn(canvas, i);
+                    Grid.SetRow(canvas, j);
+                    canvas.Margin = margen;
+                    canvas.Background = new SolidColorBrush(Colors.Azure);
+                    //canvas.Fill = new SolidColorBrush(col);
+                    canvas.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
+                    gridRival.Children.Add(canvas);
                 }
             }
             //drag and drop
             //https://msdn.microsoft.com/en-us/library/ms742859%28v=vs.110%29.aspx
-            var brush = new ImageBrush();
+            ImageBrush brush = new ImageBrush();
             brush.ImageSource = new BitmapImage(new Uri("Imagenes/fondo.png", UriKind.Relative));
 
             for (int i = 0; i < gridPropio.ColumnDefinitions.Count; i++) {
                 for (int j = 0; j < gridPropio.RowDefinitions.Count; j++) {
-                    ca = new Canvas();
-                    Grid.SetColumn(ca, i);
-                    Grid.SetRow(ca, j);
-
-                    ca.Margin = margen;
-                    ca.Background = brush;
-
-                    ca.AllowDrop = true;
-                    ca.Drop += ca_Drop;
-
-                    //ca.Fill = new SolidColorBrush(col);
-                    //ca.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
-
-                    gridPropio.Children.Add(ca);
+                    canvas = new Canvas();
+                    Grid.SetColumn(canvas, i);
+                    Grid.SetRow(canvas, j);
+                    canvas.Margin = margen;
+                    canvas.Background = brush;
+                    canvas.AllowDrop = true;
+                    canvas.Drop += ca_Drop;
+                    //canvas.Fill = new SolidColorBrush(col);
+                    //canvas.MouseDown += new MouseButtonEventHandler(Rectangle_MouseDown_1);
+                    gridPropio.Children.Add(canvas);
                 }
             }
 
-            //sockets
-
-            //sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            //sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-
-
-            //try {
-            //    //sockCli.Connect(localEndPoint);
-            //    //Convert.ToBase64CharArray("prueba2<EOF>");
-            //    //sockCli.Connect(localEndPoint);
-
-            //    //sockCli.Shutdown(SocketShutdown.Both);
-            //    //sockCli.Close();
-
-
-            //}
-            //catch (Exception ex) {
-            //    MessageBox.Show(ex.Message);
-            //}
-
             List<Barco> barcos = new List<Barco>();
             //metodo reiniciar partida
+
+            //ELIMINAR
+            for (int i = 0; i < 10; i++) {
+                barcos.Add(new Barco(3, canvasBarcos, 0));
+            }
             barcos.Add(new Barco(3, canvasBarcos, 0));
             barcos.Add(new Barco(2, canvasBarcos, 30));
             barcos.Add(new Barco(2, canvasBarcos, 60));
             barcos.Add(new Barco(1, canvasBarcos, 90));
             barcos.Add(new Barco(1, canvasBarcos, 120));
             barcos.Add(new Barco(1, canvasBarcos, 120));
-            
+
             ipHostInfo = Dns.Resolve(Dns.GetHostName());
             ipAddress = ipHostInfo.AddressList[0];
             localEndPoint = new IPEndPoint(ipAddress, 11000);
@@ -127,7 +107,7 @@ namespace IvanProyecto {
                 //MessageBox.Show(e.GetPosition(canvasNuevo).ToString());
                 Label label = (Label)e.Data.GetData("Etiqueta");
                 Barco barco = (Barco)e.Data.GetData("Object");
-                MessageBox.Show(barco.getTamaño().ToString());
+                //MessageBox.Show(barco.getTamaño().ToString());
                 if (canvasNuevo != null && label != null) {
                     Canvas padre = (Canvas)VisualTreeHelper.GetParent(label);
                     if (padre != null) {
@@ -136,35 +116,66 @@ namespace IvanProyecto {
                             //rotar
                             columna = Grid.GetColumn(canvasNuevo);
                             fila = Grid.GetRow(canvasNuevo);
-                            if (barco.getTamaño() >1) {
-                                Orientacion or = new Orientacion(columna, fila, barco.getTamaño());
-                                or.ShowDialog();
-                                //label.RenderTransform = 23432;
-                            }
-                            
-                            //quitar
-                            if (Grid.GetColumn(canvasNuevo) + barco.getTamaño() > 10) {
-                                MessageBox.Show("No se puede colocar aquí");
-                            }
-                            else {
+                            bool colocado = colocarBarco(canvasNuevo, label, barco, columna, fila);
+                            //QUITAR
+                            //if (Grid.GetColumn(canvasNuevo) + barco.getTamaño() > 20) {
+                            //    MessageBox.Show("No se puede colocar aquí");
+                            //}
+                            //else {
+                            if (colocado) {
                                 padre.Children.Remove(label);
                                 //MessageBox.Show(Grid.GetColumn(canvasNuevo).ToString());
                                 canvasNuevo.Children.Add(label);
-                                Canvas.SetTop(label, 0);
+                                //Canvas.SetTop(label, 0);
                                 barco.eliminarMouseDown();
+                                //va fuera
                                 if (canvasBarcos.Children.Count == 0) {
                                     MessageBox.Show("No tiene hijos");
                                     this.bJugar.IsEnabled = true;
                                 }
                             }
-
                         }
                     }
                 }
-                //MessageBox.Show("asdf");
             }
         }
 
+        private bool colocarBarco(Canvas padre, Label label, Barco barco, int x, int y) {
+            if (barco.getTamaño() > 1) {
+                Orientacion or = new Orientacion(x, y, barco.getTamaño());
+                if (or.ShowDialog() == or.DialogResult) {
+                    //0 derecha, 1 abajo, 2 izquierda, 3 arriba
+                    int direccion = or.Direccion;
+                    //rota según la dirección
+                    RotateTransform rotateTransform1 = new RotateTransform(90 * direccion, 17.5, 17.5);
+                    label.RenderTransform = rotateTransform1;
+                    for (int i = 0; i < barco.getTamaño(); i++) {
+                        barco.anyadirCoordenadas(x, y);
+                        switch (direccion) {
+                            case 0:
+                                x++;
+                                break;
+                            case 1:
+                                y++;
+                                break;
+                            case 2:
+                                x--;
+                                break;
+                            case 3:
+                                y--;
+                                break;
+                        }
+                        Console.WriteLine(x.ToString() +" "+ y.ToString());
+                    }
+                    return true;
+                }
+                return false;
+            }
+            barco.anyadirCoordenadas(x, y);
+            Console.WriteLine(x.ToString() + " " + y.ToString());
+            return true;
+        }
+        //SOCKET SERVIDOR, FALTA PODER CAMBIAR IP
         Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         private void worker_DoWork(object sender, DoWorkEventArgs e) {
@@ -189,37 +200,24 @@ namespace IvanProyecto {
                         }
                     }
 
-                    // Show the data on the console.
+
                     //MessageBox.Show(data);
+                    //BORRAR CONSOLE
                     Console.WriteLine("Text received : {0}", data);
                     Dispatcher dire = this.Dispatcher;
                     dire.BeginInvoke(DispatcherPriority.Normal, (Action)(() => ProcesarMensajes(data)));
-
                     // Echo the data back to the client.
                     byte[] msg = Encoding.ASCII.GetBytes("asdf");
-
                     //handler.Send(msg);
                     handler.Shutdown(SocketShutdown.Both);
                     handler.Close();
                 }
-
             }
             catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
 
         }
-
-        //private String localIp() {
-        //    IPHostEntry host;
-        //    host = Dns.GetHostEntry(Dns.GetHostName());
-        //    foreach (IPAddress ip in host.AddressList) {
-        //        if (ip.AddressFamily == AddressFamily.InterNetwork) {
-        //            return ip.ToString();
-        //        }
-        //    }
-        //    return "127.0.0.1";
-        //}
 
         private void cambiar(String[] coor) {
             foreach (FrameworkElement canv in this.gridPropio.Children) {
@@ -229,8 +227,6 @@ namespace IvanProyecto {
                 }
             }
         }
-
-
 
         private void ProcesarMensajes(string mensajeRecibido) {
             const int PJ = 0;
@@ -260,6 +256,8 @@ namespace IvanProyecto {
             int x = Convert.ToInt32(mens[1]);
             MessageBox.Show(x.ToString());
         }
+        //BORRAR
+
         private void MessageCallBack(IAsyncResult aResult) {
             try {
                 int size = sock.EndReceiveFrom(aResult, ref epRemote);
@@ -291,29 +289,12 @@ namespace IvanProyecto {
             catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
-
-        }
-
-        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            MessageBox.Show("asdf");
-            //asdfdsf
-            //Socket soc = new Socket("localhost", "5555");
-            //soc.Accept();
-        }
-
-        private void Grid_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e) {
-            MessageBox.Show(e.GetPosition(this).X.ToString());
-            MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
-            //if (e.GetPosition(this).ToString()) {
-
-            //}
         }
 
         private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e) {
 
         }
 
-        //devuelve columna y fila
         private void Rectangle_MouseDown_1(object sender, MouseButtonEventArgs e) {
 
             Canvas can = sender as Canvas;
@@ -353,83 +334,64 @@ namespace IvanProyecto {
             //sockCli.Shutdown(SocketShutdown.Both);
         }
 
+        //botón nick
         private void Button_Click(object sender, RoutedEventArgs e) {
             Window2 w2 = new Window2();
             w2.ShowDialog();
         }
 
+        //botón jugar
         private void Button_Click_1(object sender, RoutedEventArgs e) {
             //this.grid.Visibility = Visibility.Visible;
             this.canvasBarcos.Visibility = Visibility.Collapsed;
             this.gridRival.Visibility = Visibility.Visible;
             this.ventana.Width = 750;
-            //epLocal = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto.Text));
-            //sock.Bind(epLocal);
-
-            //epRemote = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto2.Text));
-            //sock.Connect(epRemote);
-
-            //byte[] buffer = new byte[1024];
-            //sock.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref epRemote, new AsyncCallback(MessageCallBack), buffer);
-
         }
 
-        #region draganddrop no va
-        private void Label_MouseMove(object sender, MouseEventArgs e) {
-            Label la = sender as Label;
-            if (la != null && e.LeftButton == MouseButtonState.Pressed) {
-                DragDrop.DoDragDrop(la, la.Content.ToString(), DragDropEffects.Move);
-            }
+        public static class Mensajes {
         }
-
-        private void Ellipse_MouseMove(object sender, MouseEventArgs e) {
-            Ellipse ellipse = sender as Ellipse;
-            if (ellipse != null && e.LeftButton == MouseButtonState.Pressed) {
-                DragDrop.DoDragDrop(ellipse, ellipse.Fill.ToString(), DragDropEffects.Copy);
-            }
-        }
-
-        private void gridPropio_Drop(object sender, DragEventArgs e) {
-
-
-        }
-
-        private Brush _previousFill = null;
-        private void gridPropio_DragEnter(object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent(DataFormats.Bitmap)) {
-                e.Effects = DragDropEffects.Copy;
-            }
-            else {
-                e.Effects = DragDropEffects.None;
-            }
-        }
-
-        private void gridPropio_DragOver(object sender, DragEventArgs e) {
-            e.Effects = DragDropEffects.None;
-
-            // If the DataObject contains string data, extract it. 
-            if (e.Data.GetDataPresent(DataFormats.StringFormat)) {
-                string dataString = (string)e.Data.GetData(DataFormats.StringFormat);
-
-                // If the string can be converted into a Brush, allow copying.
-                BrushConverter converter = new BrushConverter();
-                if (converter.IsValid(dataString)) {
-                    e.Effects = DragDropEffects.Copy | DragDropEffects.Move;
-                }
-            }
-        }
-        #endregion
-
-        private void gridPropio_Drop_1(object sender, DragEventArgs e) {
-
-        }
-    }
-
-    public static class Mensajes {
-
 
     }
-
 }
 
+//sockets
 
+//sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+//sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+
+
+//try {
+//    //sockCli.Connect(localEndPoint);
+//    //Convert.ToBase64CharArray("prueba2<EOF>");
+//    //sockCli.Connect(localEndPoint);
+
+//    //sockCli.Shutdown(SocketShutdown.Both);
+//    //sockCli.Close();
+
+
+//}
+//catch (Exception ex) {
+//    MessageBox.Show(ex.Message);
+//}
+
+
+//private String localIp() {
+//    IPHostEntry host;
+//    host = Dns.GetHostEntry(Dns.GetHostName());
+//    foreach (IPAddress ip in host.AddressList) {
+//        if (ip.AddressFamily == AddressFamily.InterNetwork) {
+//            return ip.ToString();
+//        }
+//    }
+//    return "127.0.0.1";
+//}
+
+//async
+//epLocal = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto.Text));
+//sock.Bind(epLocal);
+
+//epRemote = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Convert.ToInt32(this.puerto2.Text));
+//sock.Connect(epRemote);
+
+//byte[] buffer = new byte[1024];
+//sock.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref epRemote, new AsyncCallback(MessageCallBack), buffer);
