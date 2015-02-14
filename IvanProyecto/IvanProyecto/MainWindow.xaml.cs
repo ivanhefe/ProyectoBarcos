@@ -169,11 +169,11 @@ namespace IvanProyecto {
             int direccion = 0;
             if (barco.getTamaño() > 1) {
                 Orientacion or = new Orientacion(x, y, barco.getTamaño());
-                if (or.ShowDialog() == or.DialogResult) {
+                or.ShowDialog();
+                if (or.DialogResult == true) {
                     //0 derecha, 1 abajo, 2 izquierda, 3 arriba
                     direccion = or.Direccion;
-                }
-                else {
+                }else {
                     return false;
                 }
             }
