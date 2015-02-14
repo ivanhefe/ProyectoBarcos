@@ -61,12 +61,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Barco.cs" />
+    <Compile Include="IP.xaml.cs">
+      <DependentUpon>IP.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Orientacion.xaml.cs">
       <DependentUpon>Orientacion.xaml</DependentUpon>
     </Compile>
     <Compile Include="Window2.xaml.cs">
       <DependentUpon>Window2.xaml</DependentUpon>
     </Compile>
+    <Page Include="IP.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

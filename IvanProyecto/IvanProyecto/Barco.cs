@@ -20,7 +20,7 @@ namespace IvanProyecto {
 
         public Barco(int tamaño, FrameworkElement padre, int posicion) {
             string tam = tamaño.ToString();
-            var brush = new ImageBrush();
+            ImageBrush brush = new ImageBrush();
             brush.ImageSource = new BitmapImage(new Uri("./Imagenes/barco"+tam+".png", UriKind.Relative));
             this.tamaño = tamaño;
             this.vida = tamaño;
@@ -61,14 +61,16 @@ namespace IvanProyecto {
             coordenadas.Add(new Coordenadas(x, y));
         }
 
+        //limpia coordenadas
         public void eliminarCoordenadas() {
             coordenadas.Clear();
         }
+        //elimina evento
         public void eliminarMouseDown() {
             this.etiqueta.MouseDown -= etiqueta_MouseDown;
         }
-        //comprueba si el disparo enemigo acierta en alguna coordenada
-        
+
+        //comprueba si hay algo en esa posición
         public Boolean comprobarPosicion(int x, int y) {
             
             for (int i = 0; i < coordenadas.Count; i++) {

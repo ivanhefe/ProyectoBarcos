@@ -33,3 +33,5 @@ C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debu
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\Orientacion.baml
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\Orientacion.g.cs
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\bin\Debug\Imagenes\barco1.png
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IP.baml
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IP.g.cs

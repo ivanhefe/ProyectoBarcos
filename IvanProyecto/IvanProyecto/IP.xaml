@@ -1,0 +1,31 @@
+﻿<Window x:Class="IvanProyecto.IP"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="IP" Height="137" Width="200" ResizeMode="NoResize" Loaded="Window_Loaded">
+    <StackPanel Background="#FF932D2D">
+        <DockPanel Height="103" LastChildFill="True">
+            <Grid DockPanel.Dock="Top" Height="58" VerticalAlignment="Top" Background="#FFD8C9C9">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="36*"/>
+                    <ColumnDefinition Width="61*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="IP" />
+                <Label Content="Puerto" Grid.Row="1"/>
+                <TextBox x:Name="tbIP" Grid.Column="1" Margin="2"/>
+                <TextBox x:Name="tbPuerto" Grid.Column="1" Grid.Row="1" Margin="2"/>
+            </Grid>
+            <Grid Background="#FFC37979" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Aceptar" Margin="5" Click="Button_Click"/>
+                <Button Content="Cancelar" Grid.Column="1" Margin="5" Click="Button_Click_1"/>
+            </Grid>
+        </DockPanel>
+    </StackPanel>
+</Window>
