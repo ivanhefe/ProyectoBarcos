@@ -34,3 +34,6 @@ C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debu
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IvanProyecto.csproj.GenerateResource.Cache
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IvanProyecto.exe
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IvanProyecto.pdb
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\IvanProyecto.csprojResolveAssemblyReference.cache
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\Mensaje.baml
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Debug\Mensaje.g.cs

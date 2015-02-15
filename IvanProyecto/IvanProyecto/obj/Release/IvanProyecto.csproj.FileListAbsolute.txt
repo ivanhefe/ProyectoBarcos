@@ -1,10 +1,16 @@
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\bin\Release\Imagenes\barco1.png
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\bin\Release\IvanProyecto.exe.config
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\bin\Release\IvanProyecto.exe
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\bin\Release\IvanProyecto.pdb
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IvanProyecto.csprojResolveAssemblyReference.cache
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IP.baml
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\MainWindow.baml
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\Window2.baml
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\Mensaje.baml
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\Orientacion.baml
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IP.g.cs
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\MainWindow.g.cs
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\Window2.g.cs
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\Mensaje.g.cs
+C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\Orientacion.g.cs
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\App.g.cs
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IvanProyecto_MarkupCompile.cache
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IvanProyecto.g.resources
@@ -12,6 +18,3 @@ C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Rele
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IvanProyecto.csproj.GenerateResource.Cache
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IvanProyecto.exe
 C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IvanProyecto.pdb
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\IvanProyecto.csprojResolveAssemblyReference.cache
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\Orientacion.baml
-C:\Users\Ivan\Documents\GitHub\ProyectoBarcos\IvanProyecto\IvanProyecto\obj\Release\Orientacion.g.cs

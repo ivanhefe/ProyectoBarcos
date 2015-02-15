@@ -21,11 +21,11 @@ namespace IvanProyecto {
         public Barco(int tamaño, FrameworkElement padre, int posicion) {
             string tam = tamaño.ToString();
             ImageBrush brush = new ImageBrush();
-            brush.ImageSource = new BitmapImage(new Uri("./Imagenes/barco"+tam+".png", UriKind.Relative));
+            brush.ImageSource = new BitmapImage(new Uri("./Imagenes/barco" + tam + ".png", UriKind.Relative));
             this.tamaño = tamaño;
             this.vida = tamaño;
             etiqueta = new Label();
-            if (tamaño == 1 || tamaño == 2 || tamaño == 3 ) {
+            if (tamaño == 1 || tamaño == 2 || tamaño == 3) {
                 this.etiqueta.Background = brush;
                 this.etiqueta.Width = 33 * tamaño;
                 this.etiqueta.Height = 33;
@@ -36,7 +36,7 @@ namespace IvanProyecto {
                 etiqueta.FontSize = 33;
                 etiqueta.FontWeight = FontWeights.ExtraBlack;
             }
-            
+
             etiqueta.MouseDown += etiqueta_MouseDown;
             ((Canvas)padre).Children.Add(etiqueta);
             Canvas.SetTop(etiqueta, posicion);
@@ -51,12 +51,25 @@ namespace IvanProyecto {
             data.SetData("Etiqueta", this.etiqueta);
             data.SetData("Object", this);
             if (etiqueta != null && e.LeftButton == MouseButtonState.Pressed) {
-                
+
                 DragDrop.DoDragDrop(etiqueta, data, DragDropEffects.Move);
-                
+
             }
         }
+        public bool restarVida() {
+            this.vida--;
+            if (this.vida == 0) {
+                return true;
+            }
+            return false;
+        }
 
+        public bool comprobarHundido() {
+            if (this.vida ==0) {
+                return true;
+            }
+            return false;
+        }
         public void anyadirCoordenadas(int x, int y) {
             coordenadas.Add(new Coordenadas(x, y));
         }
@@ -72,7 +85,7 @@ namespace IvanProyecto {
 
         //comprueba si hay algo en esa posición
         public Boolean comprobarPosicion(int x, int y) {
-            
+
             for (int i = 0; i < coordenadas.Count; i++) {
                 if (coordenadas[i].comprobar(x, y)) {
                     return true;

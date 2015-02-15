@@ -37,6 +37,7 @@ namespace IvanProyecto {
             if (fila == 9 || fila + tamaño >10) {
                 this.bAba.IsEnabled = false;
             }
+            Direccion = 4;
         }
 
         public int Direccion {
@@ -64,11 +65,11 @@ namespace IvanProyecto {
             DialogResult = true;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {          
             DialogResult = false;
         }
 
-        private void Window_Closed(object sender, EventArgs e) {
+        private void Window_Closed(object sender, EventArgs e) {           
             DialogResult = false;
         }
     }

@@ -1,0 +1,9 @@
+0 Partida preparada 0~IPExterna~Puerto~nick~FT 
+1 Rival listo 	    1~nick~FT cuando la partida está preparada el otro rival responderá con este mensaje 
+2
+3
+4 Jugada	    4~Columna~Fila~FT 
+5 Resultado Jugada  5~0/1~0/1~FT primer 0/1 agua / tocado segundo 0/1 sin hundir / hundido
+6 Fin partida	    6~mensaje~FT esto lo mandaría el rival que tenga todos sus barcos hundidos
+7 Contestar fin     7~mensaje~FT
+8

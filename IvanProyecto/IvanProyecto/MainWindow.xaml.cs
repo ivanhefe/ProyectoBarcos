@@ -27,52 +27,43 @@ namespace IvanProyecto {
             InitializeComponent();
         }
 
-        //sockets
-        Socket sock;
-        EndPoint epLocal, epRemote;
         private readonly BackgroundWorker worker = new BackgroundWorker();
-        IPHostEntry ipHostInfo;
         IPAddress ipAddressLocal, ipAddressRival;
-        IPEndPoint localEndPoint;
+        IPEndPoint localEndPoint, rivalEndPoint;
         List<Barco> barcos;
-        
+        String nick, nickRival, puertoLocal;
+        int ultimoX, ultimoY;
+        Boolean turno = false, partidaComenzada = false;
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            string ipLocal ="";
-            string puertoLocal = "";
-            IP ventanaip = new IP();
-            if (ventanaip.ShowDialog() == ventanaip.DialogResult) {
-                ipLocal = ventanaip.sIP;
-                puertoLocal = ventanaip.sPuerto;
-            }
+            nick = this.tbNick.Text;
+            string ipLocal = "";
+            //genero un número aleatorio para poder probar en el mismo pc
+            Random ra = new Random();
+            ipLocal = GetLocalIP();
+            puertoLocal = ra.Next(11000, 11100).ToString();
+            //puertoLocal = "11000";
 
             anyadirCanvas();
             barcos = new List<Barco>();
-            //metodo reiniciar partida
 
-            //ELIMINAR
-            //for (int i = 0; i < 10; i++) {
-            //    barcos.Add(new Barco(3, canvasBarcos, 0));
-            //}
             barcos.Add(new Barco(3, canvasBarcos, 0));
             barcos.Add(new Barco(2, canvasBarcos, 30));
-            //barcos.Add(new Barco(2, canvasBarcos, 60));
-            //barcos.Add(new Barco(1, canvasBarcos, 90));
-            //barcos.Add(new Barco(1, canvasBarcos, 120));
-            barcos.Add(new Barco(1, canvasBarcos, 120));
-
+            barcos.Add(new Barco(2, canvasBarcos, 30));
+            barcos.Add(new Barco(1, canvasBarcos, 60));
+            barcos.Add(new Barco(1, canvasBarcos, 60));
+            barcos.Add(new Barco(1, canvasBarcos, 60));
 
             ipAddressLocal = IPAddress.Parse(ipLocal);
-            Console.WriteLine(ipAddressLocal.ToString());
             localEndPoint = new IPEndPoint(ipAddressLocal, Int16.Parse(puertoLocal));
-            this.ventana.Title += " "+localEndPoint.ToString();
+            this.ventana.Title += " " + localEndPoint.ToString();
             worker.DoWork += worker_DoWork;
-            //worker.RunWorkerCompleted += worker_RunWorkerCompleted;
             worker.RunWorkerAsync();
-            //Console.WriteLine(GetLocalIP());
+
         }
 
         private void anyadirCanvas() {
+            
             Canvas canvas = null;
             Thickness margen = new Thickness(1);
             //gridRival.Background = new SolidColorBrush(col);
@@ -115,46 +106,34 @@ namespace IvanProyecto {
             foreach (IPAddress ip in host.AddressList) {
                 if (ip.AddressFamily == AddressFamily.InterNetwork) {
                     localIP = ip.ToString();
+                    return localIP;
                 }
             }
-            return localIP;
+            return "127.0.0.1";
         }
 
-
         void ca_Drop(object sender, DragEventArgs e) {
-            //abrir ventana que indique dirección
             int columna, fila;
             if (e.Handled == false) {
                 Canvas canvasNuevo = (Canvas)sender;
-                //MessageBox.Show(e.GetPosition(canvasNuevo).ToString());
                 Label label = (Label)e.Data.GetData("Etiqueta");
                 Barco barco = (Barco)e.Data.GetData("Object");
-                //MessageBox.Show(barco.getTamaño().ToString());
                 if (canvasNuevo != null && label != null) {
                     Canvas padre = (Canvas)VisualTreeHelper.GetParent(label);
                     if (padre != null) {
-                        //MessageBox.Show("zxzx");
                         if (e.AllowedEffects.HasFlag(DragDropEffects.Move)) {
                             //rotar
                             columna = Grid.GetColumn(canvasNuevo);
                             fila = Grid.GetRow(canvasNuevo);
                             bool colocado = colocarBarco(canvasNuevo, label, barco, columna, fila);
-                            //QUITAR
-                            //if (Grid.GetColumn(canvasNuevo) + barco.getTamaño() > 20) {
-                            //    MessageBox.Show("No se puede colocar aquí");
-                            //}
-                            //else {
                             if (colocado) {
                                 padre.Children.Remove(label);
-                                //MessageBox.Show(Grid.GetColumn(canvasNuevo).ToString());
                                 canvasNuevo.Children.Add(label);
                                 Canvas.SetTop(label, 0);
                                 barco.eliminarMouseDown();
-                                //va fuera
-
                             }
                             if (canvasBarcos.Children.Count == 0) {
-                                MessageBox.Show("No tiene hijos");
+                                //MessageBox.Show("No tiene hijos");
                                 this.bJugar.IsEnabled = true;
                             }
                         }
@@ -164,16 +143,24 @@ namespace IvanProyecto {
         }
 
         private bool colocarBarco(Canvas padre, Label label, Barco barco, int x, int y) {
-            //si barco es mayor que 1 abre orientación
+            //si el barco es mayor que 1 abre orientación
             bool ocupado = false;
             int direccion = 0;
             if (barco.getTamaño() > 1) {
                 Orientacion or = new Orientacion(x, y, barco.getTamaño());
+                //salta una excepción Primera excepción del tipo 'System.InvalidOperationException' en PresentationFramework.dll
+                //or.ShowDialog();
+                //if (or.DialogResult == true) {
+                //    //0 derecha, 1 abajo, 2 izquierda, 3 arriba
+                //    direccion = or.Direccion;
+                //}else {
+                //    return false;
+                //}
+
+                //"funciona"
                 or.ShowDialog();
-                if (or.DialogResult == true) {
-                    //0 derecha, 1 abajo, 2 izquierda, 3 arriba
-                    direccion = or.Direccion;
-                }else {
+                direccion = or.Direccion;
+                if (direccion == 4) {
                     return false;
                 }
             }
@@ -203,8 +190,9 @@ namespace IvanProyecto {
                             y--;
                             break;
                     }
-                }else {
-                    Console.WriteLine("ocupado");
+                }
+                else {
+                    //Console.WriteLine("ocupado");
                     return false;
                 }
             }
@@ -212,9 +200,10 @@ namespace IvanProyecto {
             label.RenderTransform = rotateTransform1;
             return true;
         }
-        //SOCKET SERVIDOR, FALTA PODER CAMBIAR IP
-        Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
+        //socket servidor
+        Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        Socket handler;
         private void worker_DoWork(object sender, DoWorkEventArgs e) {
             String data = null;
             byte[] bytes = new Byte[1024];
@@ -222,11 +211,9 @@ namespace IvanProyecto {
                 listener.Bind(localEndPoint);
                 listener.Listen(1);
                 while (true) {
-                    Console.WriteLine("Waiting for a connection...");
-                    // Program is suspended while waiting for an incoming connection.
-                    Socket handler = listener.Accept();
-
-                    // An incoming connection needs to be processed.
+                    //Console.WriteLine("Waiting for a connection...");
+                    handler = listener.Accept();
+                    data = null;
                     while (true) {
                         bytes = new byte[1024];
                         int bytesRec = handler.Receive(bytes);
@@ -235,17 +222,8 @@ namespace IvanProyecto {
                             break;
                         }
                     }
-                    //MessageBox.Show(data);
-                    //BORRAR CONSOLE
-                    Console.WriteLine("Text received : {0}", data);
                     Dispatcher dire = this.Dispatcher;
-                    string mensaje = "men : ";
-                    dire.BeginInvoke(DispatcherPriority.Normal, (Action)(() => ProcesarMensajes(data))
-                        );
-                    // Echo the data back to the client.
-                    //mensaje = ProcesarMensajes(data);
-                    byte[] msg = Encoding.ASCII.GetBytes(mensaje);
-                    handler.Send(msg);
+                    dire.BeginInvoke(DispatcherPriority.Normal, (Action)(() => ProcesarMensajes(data)));
                     handler.Shutdown(SocketShutdown.Both);
                     handler.Close();
                 }
@@ -255,140 +233,180 @@ namespace IvanProyecto {
             }
         }
 
-        private void cambiar(String[] coor) {
-            foreach (FrameworkElement canv in this.gridPropio.Children) {
-                if (Convert.ToInt32(coor[0]) == Grid.GetColumn(canv) && Convert.ToInt32(coor[1]) == Grid.GetRow(canv)) {
-                    ((Canvas)canv).Background = new SolidColorBrush(Colors.Red);
-                    break;
-                }
-            }
-        }
+        //procesa los mensajes recibidos en el servidor
+        private void ProcesarMensajes(string mensajeRecibido) {
+            const int PP = 0;
+            const int RL = 1;
+            const int JU = 4;
+            const int RJ = 5;
+            const int FP = 6;
+            const int CF = 7;
 
-        private void socketCliente() {
-
-        }
-
-        private string ProcesarMensajes(string mensajeRecibido) {
-            const int PJ = 6;
-            int sas = 0;
-            this.check.IsChecked = true;
             string[] mensaje = mensajeRecibido.Split('~');
-            Int32 x, y;
-            //aasdf(mensajeRecibido);
+           
             switch (Convert.ToInt16(mensaje[0])) {
-                case PJ:
-                    //MessageBox.Show("asdf");
-                    x = Convert.ToInt32(mensaje[1]);
-                    y = Convert.ToInt32(mensaje[2]);
-                    foreach (Barco barco in barcos) {
-                        if (barco.comprobarPosicion(x, y)) {
-                            sas = 1;
-                        }
-                        else {
-                            sas = 2;
-                        }
-                    }
+                case PP:
+                    partidaPreparada(mensajeRecibido);
                     break;
-                default:
-                    sas = 3;
+                case RL:
+                    rivalListo(mensajeRecibido);
+                    break;
+                case JU:
+                    jugadaRecibida(mensajeRecibido);
+                    break;
+                case RJ:
+                    resultadoJugada(mensajeRecibido);
+                    break;
+                case FP:
+                    finPartida(mensajeRecibido);
+                    break;
+                case CF:
+                    contestacionFin(mensajeRecibido);
                     break;
             }
-            return sas.ToString();
         }
 
-        private void aasdf(string mensaje) {
-            string[] mens = mensaje.Split('~');
-            int x = Convert.ToInt32(mens[1]);
-            //MessageBox.Show(x.ToString());
+        private void partidaPreparada(string mensaje) {
+            string[] mensajeDividido = mensaje.Split('~');
+            string ipRival, puertoRival;
+            ipRival = mensajeDividido[1];
+            //Console.WriteLine(ipRival + " ip");
+            ipAddressRival = IPAddress.Parse(ipRival);
+            puertoRival = mensajeDividido[2];
+            //Console.WriteLine(puertoRival + " puerto");
+            rivalEndPoint = new IPEndPoint(ipAddressRival, Convert.ToInt16(puertoRival));
+            nickRival = mensajeDividido[3];
+            this.lbNickRival.Content = nickRival;
+            this.check.IsChecked = true;
+            partidaComenzada = true;
         }
-        //BORRAR
 
-        private void mandarMensaje(String mensaje) {
-        
-        
+        private void rivalListo(string mensaje) {
+            string[] mensajeDividido = mensaje.Split('~');
+            this.lbNickRival.Content = mensajeDividido[1];
+            this.partidaComenzada = true;
+            this.turno = true;
+            this.bJugar.IsEnabled = false;
         }
-        #region messagecall
-        private void MessageCallBack(IAsyncResult aResult) {
-            try {
-                int size = sock.EndReceiveFrom(aResult, ref epRemote);
-                if (size > 0) {
-                    byte[] receivedData = new byte[1024];
-                    receivedData = (byte[])aResult.AsyncState;
-                    ASCIIEncoding eEncoding = new ASCIIEncoding();
-                    string receivedMessage = eEncoding.GetString(receivedData);
-                    MessageBox.Show(receivedMessage);
 
-                    string coord = receivedMessage.ToString().Substring(0, 3);
-                    String[] coord2 = coord.Split(',');
-
-                    //cambiar(coor);
-                    Action action = delegate {
-                        foreach (FrameworkElement canv in this.gridPropio.Children) {
-                            if (Convert.ToInt32(coord2[0]) == Grid.GetColumn(canv) && Convert.ToInt32(coord2[1]) == Grid.GetRow(canv)) {
-                                ((Canvas)canv).Background = new SolidColorBrush(Colors.Red);
-                                break;
-                            }
-                        }
-                    };
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, action);
+        private void jugadaRecibida(string mensaje) {
+            string[] mensajeDividido = mensaje.Split('~');
+            int x = Convert.ToInt16(mensajeDividido[1]);
+            int y = Convert.ToInt16(mensajeDividido[2]);
+            Boolean acierto = false, hundido = false;
+            for (int i = 0; i < barcos.Count; i++) {
+                if (barcos[i].comprobarPosicion(x, y)) {
+                    acierto = true;
+                    hundido = barcos[i].restarVida();
+                    //Console.WriteLine("acierto");
+                    //Console.WriteLine(hundido.ToString());
+                    break;
                 }
-
-                byte[] buffer = new byte[1024];
-                sock.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref epRemote, new AsyncCallback(MessageCallBack), buffer);
+                //Console.WriteLine("for jugadaRecibida");
             }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message);
+            cambiarCuadricula(x, y, acierto, gridPropio);
+            //responderJugada
+            int aciertoNum = Convert.ToInt16(acierto ? 1 : 0);
+            int hundidoNum = Convert.ToInt16(hundido ? 1 : 0);
+            mandarMensaje("5~" + aciertoNum + "~" + hundidoNum + "~FT");
+            comprobarBarcos();
+            this.turno = true;
+        }
+
+        private void comprobarBarcos() {
+            Boolean hundidos = false;
+            for (int i = 0; i < barcos.Count; i++) {
+                hundidos = barcos[i].comprobarHundido();
+                if (hundidos == false) {
+                    break;
+                }
+            }
+            if (hundidos) {
+                //manda mensaje de final de partida
+                String mensaje = "";
+                Mensaje mens = new Mensaje("Has perdido");
+                
+                mens.ShowDialog();
+                if (mens.DialogResult == true) {
+                    mensaje = mens.texto.Text;
+                }
+                else {
+                    mensaje = mens.predeterminado;
+                }
+                mandarMensaje("6~"+mensaje+"~FT");
             }
         }
-        #endregion
 
-        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e) {
+        private void resultadoJugada(string mensaje) {
+            string[] mensajeDividido = mensaje.Split('~');
+            Boolean acierto = Convert.ToBoolean(Convert.ToInt16(mensajeDividido[1]) == 1 ? true : false);
+            cambiarCuadricula(this.ultimoX, this.ultimoY, acierto, gridRival);
+            Boolean hundido = Convert.ToBoolean(Convert.ToInt16(mensajeDividido[2]) == 1 ? true : false);
+            if (hundido) {
+                MessageBox.Show("Barco Hundido");
+            }
+        }
 
+        private void finPartida(string mensaje) {
+            string[] mensajeDividido = mensaje.Split('~');
+            MessageBox.Show(mensajeDividido[1]);
+            String mensa = "";
+            Mensaje mens = new Mensaje("Has Ganado");
+            
+            mens.ShowDialog();
+            if (mens.DialogResult == true) {
+                mensa = mens.texto.Text;
+            }
+            else {
+                mensa = mens.predeterminado;
+            }
+            turno = false;
+            partidaComenzada = false;
+            mandarMensaje("7~"+mensa+"~FT");
+        }
+
+        private void contestacionFin(string mensaje) {
+            string[] mensajeDividido = mensaje.Split('~');
+            MessageBox.Show(mensajeDividido[1]);
+        }
+
+        //añade un "palo" en la casilla correspodiente
+        private void cambiarCuadricula(int x, int y, Boolean acierto, Grid grid) {
+            ImageBrush brush = new ImageBrush();
+            Canvas canvas = new Canvas();
+            canvas.Height = 35;
+            canvas.Width = 35;
+            if (acierto) {
+                brush.ImageSource = new BitmapImage(new Uri("Imagenes/paloBarco.png", UriKind.Relative));
+            }
+            else {
+                brush.ImageSource = new BitmapImage(new Uri("Imagenes/paloAgua.png", UriKind.Relative));
+            }
+            foreach (FrameworkElement canv in grid.Children) {
+                if (x == Grid.GetColumn(canv) && y == Grid.GetRow(canv)) {
+                    canvas.Background = brush;
+                    ((Canvas)canv).Children.Add(canvas);
+                    break;
+                }
+            }
         }
 
         private void canvas_MouseDown_1(object sender, MouseButtonEventArgs e) {
-
-            Canvas can = sender as Canvas;
-            if (can.Tag == null) {
-                int x = Grid.GetColumn(can);
-                int y = Grid.GetRow(can);
-                can.Background = new SolidColorBrush(Colors.Red);
-                can.Tag = new object();
-                //mandar las coordenadas al otro jugador
-
-                try {
-                    ASCIIEncoding enc = new ASCIIEncoding();
-                    byte[] msg = new byte[1024];
-                    msg = enc.GetBytes(x + "," + y);
-                    sock.Send(msg);
+            //sólo "funciona" cuando es tu turno
+            if (turno && partidaComenzada) {
+                Canvas can = sender as Canvas;
+                if (can.Tag == null) {
+                    this.ultimoX = Grid.GetColumn(can);
+                    this.ultimoY = Grid.GetRow(can);
+                    can.Tag = new object();
+                    //mandar las coordenadas al otro jugador
+                    mandarMensaje("4~" + this.ultimoX.ToString() + "~" + this.ultimoY.ToString() + "~FT");
+                    turno = false;
                 }
-                catch (Exception ex) {
-                    MessageBox.Show(ex.Message);
+                else {
+                    MessageBox.Show("Ya has clickeado en esta casilla");
                 }
             }
-            else {
-                MessageBox.Show("Ya has clickeado en esta casilla");
-            }
-        }
-
-        private void enviarComando(String comando) {
-            byte[] msg = Encoding.ASCII.GetBytes("mensaje prueba<EOF>");
-            try {
-                //sock.Connect(localEndPoint);
-                //sock.Send(msg);
-                //sock.Shutdown(SocketShutdown.Both);
-                //sock.Disconnect(true);
-            }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message);
-            }
-            //sockCli.Shutdown(SocketShutdown.Both);
-        }
-
-        //botón nick
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            Window2 w2 = new Window2();
-            w2.ShowDialog();
         }
 
         //botón jugar
@@ -397,11 +415,43 @@ namespace IvanProyecto {
             this.canvasBarcos.Visibility = Visibility.Collapsed;
             this.gridRival.Visibility = Visibility.Visible;
             this.ventana.Width = 750;
+            this.bJugar.IsEnabled = false;
+            if (this.check.IsChecked == false) {
+                IP ip = new IP();
+                ip.ShowDialog();
+                if (ip.DialogResult == true) {
+                    Console.WriteLine(ip.ipPropia);
+                    ipAddressRival = IPAddress.Parse(ip.sIP);
+                    rivalEndPoint = new IPEndPoint(ipAddressRival, Convert.ToInt16(ip.sPuerto));
+                    mandarMensaje("0~" + ip.ipPropia + "~" + puertoLocal + "~" + nick + "~FT");
+                }
+            }
+            else {
+                mandarMensaje("1~" + nick + "~FT");
+            }
         }
 
-        public static class Mensajes {
+        //socket cliente
+        private void mandarMensaje(string mensaje) {
+            try {
+                Socket sender = new Socket(AddressFamily.InterNetwork,
+                            SocketType.Stream, ProtocolType.Tcp);
+                sender.Connect(rivalEndPoint);
+                byte[] msg = Encoding.ASCII.GetBytes(mensaje);
+                int bytesSent = sender.Send(msg);
+                sender.Shutdown(SocketShutdown.Both);
+                sender.Close();
+            }
+            catch (ArgumentNullException ane) {
+                MessageBox.Show(ane.Message);
+            }
+            catch (SocketException se) {
+                MessageBox.Show(se.Message);
+            }
+            catch (Exception e) {
+                MessageBox.Show(e.Message);
+            }
         }
-
     }
 }
 
@@ -446,3 +496,12 @@ namespace IvanProyecto {
 
 //byte[] buffer = new byte[1024];
 //sock.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref epRemote, new AsyncCallback(MessageCallBack), buffer);
+
+//private void cambiar(String[] coor) {
+//    foreach (FrameworkElement canv in this.gridPropio.Children) {
+//        if (Convert.ToInt32(coor[0]) == Grid.GetColumn(canv) && Convert.ToInt32(coor[1]) == Grid.GetRow(canv)) {
+//            ((Canvas)canv).Background = new SolidColorBrush(Colors.Red);
+//            break;
+//        }
+//    }
+//}
