@@ -41,8 +41,8 @@ namespace IvanProyecto {
             //genero un número aleatorio para poder probar en el mismo pc
             Random ra = new Random();
             ipLocal = GetLocalIP();
-            puertoLocal = ra.Next(11000, 11100).ToString();
-            //puertoLocal = "11000";
+            //puertoLocal = ra.Next(11000, 11100).ToString();
+            puertoLocal = "11000";
 
             anyadirCanvas();
             barcos = new List<Barco>();
@@ -149,22 +149,23 @@ namespace IvanProyecto {
             //los barcos de 1 casilla no es necesario pedir dirección
             if (barco.getTamaño() > 1) {
                 Orientacion or = new Orientacion(x, y, barco.getTamaño());
-                //salta una excepción Primera excepción del tipo 'System.InvalidOperationException' en PresentationFramework.dll
-                //or.ShowDialog();
-                //if (or.DialogResult == true) {
-                //    //0 derecha, 1 abajo, 2 izquierda, 3 arriba
-                //    direccion = or.Direccion;
-                //}else {
-                //    return false;
-                //}
-
-                //"funciona"
+                
                 or.ShowDialog();
-                direccion = or.Direccion;
-                //dirección 4 es al cerrar la ventana de direcciones
-                if (direccion == 4) {
+                if (or.DialogResult == true) {
+                    //0 derecha, 1 abajo, 2 izquierda, 3 arriba
+                    direccion = or.Direccion;
+                }
+                else {
                     return false;
                 }
+
+                //"funciona"
+                //or.ShowDialog();
+                //direccion = or.Direccion;
+                //dirección 4 es al cerrar la ventana de direcciones
+                //if (direccion == 4) {
+                //    return false;
+                //}
             }
             for (int i = 0; i < barco.getTamaño(); i++) {
                 for (int j = 0; j < barcos.Count; j++) {
