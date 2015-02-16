@@ -21,7 +21,7 @@ namespace IvanProyecto {
         public Barco(int tamaño, FrameworkElement padre, int posicion) {
             string tam = tamaño.ToString();
             ImageBrush brush = new ImageBrush();
-            brush.ImageSource = new BitmapImage(new Uri("./Imagenes/barco" + tam + ".png", UriKind.Relative));
+            brush.ImageSource = new BitmapImage(new Uri("Imagenes/barco" + tam + ".png", UriKind.Relative));
             this.tamaño = tamaño;
             this.vida = tamaño;
             etiqueta = new Label();
@@ -47,6 +47,7 @@ namespace IvanProyecto {
         }
         void etiqueta_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             Label etiqueta = sender as Label;
+            
             DataObject data = new DataObject();
             data.SetData("Etiqueta", this.etiqueta);
             data.SetData("Object", this);

@@ -46,7 +46,6 @@ namespace IvanProyecto {
 
             anyadirCanvas();
             barcos = new List<Barco>();
-
             barcos.Add(new Barco(3, canvasBarcos, 0));
             barcos.Add(new Barco(2, canvasBarcos, 30));
             barcos.Add(new Barco(2, canvasBarcos, 30));
@@ -62,8 +61,8 @@ namespace IvanProyecto {
 
         }
 
+        //eliminar y sacar posición mediante divisiones
         private void anyadirCanvas() {
-            
             Canvas canvas = null;
             Thickness margen = new Thickness(1);
             //gridRival.Background = new SolidColorBrush(col);
@@ -130,6 +129,7 @@ namespace IvanProyecto {
                                 padre.Children.Remove(label);
                                 canvasNuevo.Children.Add(label);
                                 Canvas.SetTop(label, 0);
+                                //elimina el evento de poder arrastrar
                                 barco.eliminarMouseDown();
                             }
                             if (canvasBarcos.Children.Count == 0) {
@@ -146,6 +146,7 @@ namespace IvanProyecto {
             //si el barco es mayor que 1 abre orientación
             bool ocupado = false;
             int direccion = 0;
+            //los barcos de 1 casilla no es necesario pedir dirección
             if (barco.getTamaño() > 1) {
                 Orientacion or = new Orientacion(x, y, barco.getTamaño());
                 //salta una excepción Primera excepción del tipo 'System.InvalidOperationException' en PresentationFramework.dll
@@ -160,6 +161,7 @@ namespace IvanProyecto {
                 //"funciona"
                 or.ShowDialog();
                 direccion = or.Direccion;
+                //dirección 4 es al cerrar la ventana de direcciones
                 if (direccion == 4) {
                     return false;
                 }
@@ -173,6 +175,7 @@ namespace IvanProyecto {
                         break;
                     }
                 }
+                //mejorar
                 if (!ocupado) {
                     barco.anyadirCoordenadas(x, y);
                     Console.WriteLine(x.ToString() + " " + y.ToString());
@@ -192,7 +195,7 @@ namespace IvanProyecto {
                     }
                 }
                 else {
-                    //Console.WriteLine("ocupado");
+                    //si alguna casilla corresponde con otro barco, no lo añade
                     return false;
                 }
             }
@@ -233,7 +236,7 @@ namespace IvanProyecto {
             }
         }
 
-        //procesa los mensajes recibidos en el servidor
+        //procesa los mensajes recibidos en el servidor, todo esto debería ir en otra clase
         private void ProcesarMensajes(string mensajeRecibido) {
             const int PP = 0;
             const int RL = 1;
@@ -325,7 +328,7 @@ namespace IvanProyecto {
                 //manda mensaje de final de partida
                 String mensaje = "";
                 Mensaje mens = new Mensaje("Has perdido");
-                
+                this.turno = false;
                 mens.ShowDialog();
                 if (mens.DialogResult == true) {
                     mensaje = mens.texto.Text;
@@ -334,6 +337,7 @@ namespace IvanProyecto {
                     mensaje = mens.predeterminado;
                 }
                 mandarMensaje("6~"+mensaje+"~FT");
+                
             }
         }
 
@@ -352,7 +356,7 @@ namespace IvanProyecto {
             MessageBox.Show(mensajeDividido[1]);
             String mensa = "";
             Mensaje mens = new Mensaje("Has Ganado");
-            
+            this.turno = false;
             mens.ShowDialog();
             if (mens.DialogResult == true) {
                 mensa = mens.texto.Text;
@@ -360,13 +364,13 @@ namespace IvanProyecto {
             else {
                 mensa = mens.predeterminado;
             }
-            turno = false;
-            partidaComenzada = false;
+            this.partidaComenzada = false;
             mandarMensaje("7~"+mensa+"~FT");
         }
 
         private void contestacionFin(string mensaje) {
             string[] mensajeDividido = mensaje.Split('~');
+            this.turno = false;
             MessageBox.Show(mensajeDividido[1]);
         }
 
@@ -415,15 +419,20 @@ namespace IvanProyecto {
             this.canvasBarcos.Visibility = Visibility.Collapsed;
             this.gridRival.Visibility = Visibility.Visible;
             this.ventana.Width = 750;
-            this.bJugar.IsEnabled = false;
             if (this.check.IsChecked == false) {
                 IP ip = new IP();
                 ip.ShowDialog();
+                try {
                 if (ip.DialogResult == true) {
                     Console.WriteLine(ip.ipPropia);
                     ipAddressRival = IPAddress.Parse(ip.sIP);
                     rivalEndPoint = new IPEndPoint(ipAddressRival, Convert.ToInt16(ip.sPuerto));
                     mandarMensaje("0~" + ip.ipPropia + "~" + puertoLocal + "~" + nick + "~FT");
+                    this.bJugar.IsEnabled = false;
+                }
+                }
+                catch (Exception ex) {
+                    Console.WriteLine("error de conexion");
                 }
             }
             else {
